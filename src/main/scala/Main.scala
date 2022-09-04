@@ -12,9 +12,14 @@ final case class TracedExecution(
 )
 
 def trace(term: Stlc, gas: Int): Either[TypeError, TracedExecution] = {
+
   def go(term: Stlc, gas: Int): Writer[List[Stlc], (Stlc, Int)] =
     if term.isInstanceOf[Value] || gas <= 0 then Writer.value((term, gas))
-    else Writer.tell(List(term)) >> go(step(term), gas - 1)
+    else
+      step(term) match {
+        case None          => Writer.value((term, gas)) // Stuck
+        case Some(newTerm) => Writer.tell(List(term)) >> go(newTerm, gas - 1)
+      }
 
   infer(term, Map.empty) match {
     case Left(err) => Left(s"Type error: $err")
@@ -25,33 +30,51 @@ def trace(term: Stlc, gas: Int): Either[TypeError, TracedExecution] = {
   }
 }
 
-def evaluate(term: Stlc, gas: Int): Either[TypeError, (Stlc, Int)] =
-  trace(term, gas).map(t => (t.result, t.remainingGas))
+def evaluate(term: Stlc, gas: Int): Either[TypeError, (Stlc, Int)] = {
+  def go(term: Stlc, gas: Int): (Stlc, Int) =
+    if term.isInstanceOf[Value] || gas <= 0 then (term, gas)
+    else
+      step(term) match {
+        case None          => (term, gas)
+        case Some(newTerm) => go(newTerm, gas - 1)
+      }
+
+  infer(term, Map.empty) match {
+    case Left(err) => Left(s"Type error: $err")
+    case Right(_)  => Right(go(term, gas))
+  }
+}
 
 object Main extends IOApp {
 
-  def interp(s: String, gas: Int): String =
-    parse(s).flatMap(trace(_, gas)) match {
-      case Right(res) => {
-        val rem = s"Remaining gas: ${res.remainingGas}"
-        val tr = res.trace.map(t => s"=> $t\n").mkString
-        val r = s"=> ${res.result}"
-        s"$tr$r\n$rem"
-      }
-      case Left(e) => e
+  def interpTrace(term: Stlc, gas: Int): Either[TypeError, String] =
+    trace(term, gas).map { res =>
+      val rem = s"Remaining gas: ${res.remainingGas}"
+      val tr = res.trace.map(t => s"$t \n=> ").mkString
+      val r = s"${res.result}"
+      s"$tr$r\n$rem"
     }
 
-  def interact(gas: Int): IO[Boolean] =
+  def interp(s: String, gas: Int, traceExecution: Boolean): String =
+    parse(s)
+      .flatMap(term =>
+        if traceExecution then interpTrace(term, gas)
+        else evaluate(term, gas).map(_(0).toString)
+      )
+      .fold(x => x, x => x)
+
+  def interact(gas: Int, trace: Boolean): IO[Boolean] =
     IO.print("> ") >> IO.readLine.flatMap(s =>
       if s == ":q" then IO.pure(true)
-      else IO.println(interp(s, gas)) >> IO.pure(false)
+      else IO.println(interp(s, gas, trace)) >> IO.pure(false)
     )
 
   override def run(args: List[String]): IO[ExitCode] = {
 
     val gas = args.get(0).map(_.toInt).get
+    val trace = args.get(1).map(_ == "trace").exists(x => x)
 
-    interact(gas).iterateUntil(x => x).as(ExitCode.Success)
+    interact(gas, trace).iterateUntil(x => x).as(ExitCode.Success)
 
   }
 

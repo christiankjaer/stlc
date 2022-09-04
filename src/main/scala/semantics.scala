@@ -1,20 +1,20 @@
-def step(term: Stlc): Stlc = {
+def step(term: Stlc): Option[Stlc] = {
   import Stlc.*
   term match {
 
     // Actual work
-    case Plus(SInt(n1), SInt(n2))     => SInt(n1 + n2)
-    case Plus(SFloat(n1), SFloat(n2)) => SFloat(n1 + n2)
-    case App(Lam(x, t, e), v: Value)  => subst(x, e, v)
+    case Plus(SInt(n1), SInt(n2))     => Some(SInt(n1 + n2))
+    case Plus(SFloat(n1), SFloat(n2)) => Some(SFloat(n1 + n2))
+    case App(Lam(x, t, e), v: Value)  => Some(subst(x, e, v))
 
     // Evaluation contexts
-    case Plus(v1: Value, e2) => Plus(v1, step(e2))
-    case Plus(e1, e2)        => Plus(step(e1), e2)
-    case App(v1: Value, e2)  => App(v1, step(e2))
-    case App(e1, e2)         => App(step(e1), e2)
+    case Plus(v1: Value, e2) => step(e2).map(Plus(v1, _))
+    case Plus(e1, e2)        => step(e1).map(Plus(_, e2))
+    case App(v1: Value, e2)  => step(e2).map(App(v1, _))
+    case App(e1, e2)         => step(e1).map(App(_, e2))
 
     // Values or stuck terms
-    case _ => term
+    case _ => None
   }
 
 }

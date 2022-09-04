@@ -1,5 +1,3 @@
-// For more information on writing tests, see
-// https://scalameta.org/munit/docs/getting-started.html
 class StlcSuite extends munit.FunSuite {
   import Stlc.*
   test("infer") {
@@ -48,7 +46,18 @@ class StlcSuite extends munit.FunSuite {
   }
 
   test("step") {
-    assertEquals(step(Plus(SInt(10), SInt(20))), SInt(30))
+    assertEquals(step(Plus(SInt(10), SInt(20))), Some(SInt(30)))
+    assertEquals(step(Plus(SInt(10), SFloat(20))), None)
+    assertEquals(step(Plus(SInt(10), SUnit)), None)
+
+    val lam = Lam("x", Ty.Int, Var("x"))
+    assertEquals(step(lam), None)
+
+    // Apply a non-value
+    assertEquals(
+      step(App(lam, Plus(SInt(10), SInt(20)))),
+      Some(App(lam, SInt(30)))
+    )
   }
 
   test("evaluate") {
@@ -59,6 +68,5 @@ class StlcSuite extends munit.FunSuite {
       evaluate(App(Lam("x", Ty.Int, Var("x")), SInt(10)), 10),
       Right(SInt(10), 9)
     )
-
   }
 }

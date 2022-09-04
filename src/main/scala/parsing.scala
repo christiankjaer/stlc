@@ -11,15 +11,14 @@ def token[T](p: P[T]): P[T] = p.surroundedBy(whitespaces0)
 
 val parseType: P[Ty] = P.recursive[Ty] { pt =>
 
-  val parseBase: P[Ty] = token(P.string("int").map(_ => Ty.Int)) | token(
-    P.string("float").map(_ => Ty.Float)
-  ) | token(P.string("unit")).map(_ => Ty.Unit) | grouped(pt)
+  val parseBase: P[Ty] = token(P.string("int").as(Ty.Int)) | token(
+    P.string("float").as(Ty.Float)
+  ) | token(P.string("unit")).as(Ty.Unit) | grouped(pt)
 
   val parseEnd: Parser0[Ty => Ty] = (token(P.string("->")) *> pt)
     .map(t => ty => Ty.Arrow(ty, t)) | P.pure[Ty => Ty](x => x)
 
   (parseBase ~ parseEnd).map { case (s, e) => e(s) }
-
 }
 
 val parseTerm: P[Stlc] = P.recursive[Stlc] { pt =>
@@ -52,5 +51,9 @@ val parseTerm: P[Stlc] = P.recursive[Stlc] { pt =>
   plus.rep.map(x => x.init.foldRight(x.last)(Stlc.App.apply))
 }
 
-def parse(s: String): Either[String, Stlc] =
-  (parseTerm <* whitespaces0 <* P.end).parseAll(s).leftMap(e => s"Parse error: ${e.toString}")
+def parse(s: String): Either[String, Stlc] = {
+  (parseTerm <* whitespaces0 <* P.end)
+    .parseAll(s)
+    .leftMap(e => s"Parse error: ${e.toString}")
+
+}
