@@ -1,5 +1,8 @@
 val scala3Version = "3.2.0"
 
+scalacOptions ++= Seq("-deprecation"
+)
+
 lazy val root = project
   .in(file("."))
   .settings(
@@ -10,6 +13,7 @@ lazy val root = project
       "org.typelevel" %% "cats-parse" % "0.3.7",
       "org.typelevel" %% "cats-core" % "2.8.0",
       "org.typelevel" %% "cats-effect" % "3.3.14",
+      "com.monovore" %% "decline-effect" % "2.2.0",
       "org.scalameta" %% "munit" % "0.7.29" % Test
     )
   )

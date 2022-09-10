@@ -37,14 +37,27 @@ class StlcSuite extends munit.FunSuite {
   }
 
   test("subst") {
-    assertEquals(subst("x", Var("x", ()), SInt(10, ())), SInt(10, ()))
-    assertEquals(subst("y", Var("x", ()), SInt(10, ())), Var("x", ()))
+    assertEquals(substValue("x", Var("x", ()), SInt(10, ())), SInt(10, ()))
+    assertEquals(substValue("y", Var("x", ()), SInt(10, ())), Var("x", ()))
     assertEquals(
-      subst("x", Lam("x", Ty.Int, Var("x", ()), ()), SInt(10, ())),
+      substValue("x", Lam("x", Ty.Int, Var("x", ()), ()), SInt(10, ())),
       Lam("x", Ty.Int, Var("x", ()), ())
     )
     assertEquals(
-      subst("y", Lam("x", Ty.Int, Var("y", ()), ()), SInt(10, ())),
+      substValue("y", Lam("x", Ty.Int, Var("y", ()), ()), SInt(10, ())),
+      Lam("x", Ty.Int, SInt(10, ()), ())
+    )
+  }
+
+  test("substTerm") {
+    assertEquals(substTerm("x", Var("x", ()), SInt(10, ())), SInt(10, ()))
+    assertEquals(substTerm("y", Var("x", ()), SInt(10, ())), Var("x", ()))
+    assertEquals(
+      substTerm("x", Lam("x", Ty.Int, Var("x", ()), ()), SInt(10, ())),
+      Lam("x", Ty.Int, Var("x", ()), ())
+    )
+    assertEquals(
+      substTerm("y", Lam("x", Ty.Int, Var("y", ()), ()), SInt(10, ())),
       Lam("x", Ty.Int, SInt(10, ()), ())
     )
   }
