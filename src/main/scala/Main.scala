@@ -27,6 +27,11 @@ def showParseErrors(err: Parser.Error): String = {
   s"$pointer\nParse error"
 }
 
+val builtins = Map(
+  "int" -> Ty.Arrow(Ty.Float, Ty.Int),
+  "float" -> Ty.Arrow(Ty.Int, Ty.Float)
+)
+
 def trace(
     term: LStlc,
     gas: Int,
@@ -43,7 +48,7 @@ def trace(
          }
       )
 
-  infer(term, Map.empty).bimap(
+  infer(term, builtins).bimap(
     showTypeError,
     { _ =>
       val ((res, remainingGas), trace) = go(term, gas).listen.value
@@ -65,7 +70,7 @@ def evaluate(
         case Some(newTerm) => go(newTerm, gas - 1)
       }
 
-  infer(term, Map.empty).bimap(showTypeError, _ => go(term, gas))
+  infer(term, builtins).bimap(showTypeError, _ => go(term, gas))
 }
 
 object Main
@@ -96,7 +101,6 @@ object Main
         else evaluate(term, state.gas, state.ev).map(_(0).toString)
       )
       .merge
-
 
   val gasRegex = ":set gas (\\d+)".r
 
@@ -144,7 +148,7 @@ object Main
       Opts.option[Int]("gas", "how much gas to provide the interpreter")
     val traceOpts =
       Opts
-        .flag("no_trace", "if the interpreter should print out the trace")
+        .flag("no_trace", "if the interpreter should not print out the trace")
         .orFalse
         .map(!_)
     val strategyOpts: Opts[Stepper] = Opts

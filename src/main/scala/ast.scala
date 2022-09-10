@@ -32,6 +32,8 @@ enum Stlc[A] {
   case Var(x: Name, a: A)
   case App(e1: Stlc[A], s2: Stlc[A], a: A)
   case Plus(e1: Stlc[A], e2: Stlc[A], a: A)
+  case ToInt(e1: Stlc[A], a: A)
+  case ToFloat(e1: Stlc[A], a: A)
 
   override def toString(): String = this match {
     case Lam(x, t, body, _) => s"(\\$x: $t => $body)"
@@ -41,6 +43,8 @@ enum Stlc[A] {
     case Var(x, _)          => x
     case App(e1, e2, _)     => s"($e1 $e2)"
     case Plus(e1, e2, _)    => s"($e1 + $e2)"
+    case ToInt(e, _)        => s"to_int($e)"
+    case ToFloat(e, _)      => s"to_float($e)"
   }
 
   // Every piece of surface syntax should have an A
@@ -52,6 +56,8 @@ enum Stlc[A] {
     case Var(_, a)       => a
     case App(_, _, a)    => a
     case Plus(_, _, a)   => a
+    case ToInt(_, a)     => a
+    case ToFloat(_, a)   => a
   }
 }
 

@@ -7,11 +7,22 @@ def stepCBV[A](term: Stlc[A]): Option[Stlc[A]] = {
     case Plus(SFloat(n1, loc), SFloat(n2, _), _) => Some(SFloat(n1 + n2, loc))
     case App(Lam(x, t, e, _), v: Value, _)       => Some(substValue(x, e, v))
 
+    case ToFloat(SInt(n, loc1), _) => Some(SFloat(n.toDouble, loc1))
+    case ToInt(SFloat(m, loc1), _) => Some(SInt(m.floor.toInt, loc1))
+
+    // Builtins
+    case Var("float", loc) =>
+      Some(Lam("x", Ty.Int, ToFloat(Var("x", loc), loc), loc))
+    case Var("int", loc) =>
+      Some(Lam("x", Ty.Float, ToInt(Var("x", loc), loc), loc))
+
     // Evaluation contexts
     case Plus(v1: Value, e2, loc) => stepCBV(e2).map(Plus(v1, _, loc))
     case Plus(e1, e2, loc)        => stepCBV(e1).map(Plus(_, e2, loc))
     case App(v1: Value, e2, loc)  => stepCBV(e2).map(App(v1, _, loc))
     case App(e1, e2, loc)         => stepCBV(e1).map(App(_, e2, loc))
+    case ToFloat(e, loc)          => stepCBV(e).map(ToFloat(_, loc))
+    case ToInt(e, loc)            => stepCBV(e).map(ToInt(_, loc))
 
     // Values or stuck terms don't step
     case _ => None
@@ -28,10 +39,21 @@ def stepCBN[A](term: Stlc[A]): Option[Stlc[A]] = {
     case Plus(SFloat(n1, loc), SFloat(n2, _), _) => Some(SFloat(n1 + n2, loc))
     case App(Lam(x, t, body, _), e, _)           => Some(substTerm(x, body, e))
 
+    case ToFloat(SInt(n, loc1), _) => Some(SFloat(n.toDouble, loc1))
+    case ToInt(SFloat(m, loc1), _) => Some(SInt(m.floor.toInt, loc1))
+
+    // Builtins
+    case Var("float", loc) =>
+      Some(Lam("x", Ty.Int, ToFloat(Var("x", loc), loc), loc))
+    case Var("int", loc) =>
+      Some(Lam("x", Ty.Float, ToInt(Var("x", loc), loc), loc))
+
     // Evaluation contexts
     case Plus(v1: Value, e2, loc) => stepCBN(e2).map(Plus(v1, _, loc))
     case Plus(e1, e2, loc)        => stepCBN(e1).map(Plus(_, e2, loc))
     case App(e1, e2, loc)         => stepCBN(e1).map(App(_, e2, loc))
+    case ToFloat(e, loc)          => stepCBN(e).map(ToFloat(_, loc))
+    case ToInt(e, loc)            => stepCBN(e).map(ToInt(_, loc))
 
     // Values or stuck terms don't step
     case _ => None
@@ -46,6 +68,8 @@ def fvs[A](e: Stlc[A]): Set[Name] = {
     case Var(x, _)       => Set(x)
     case Plus(e1, e2, _) => fvs(e1) union fvs(e2)
     case App(e1, e2, _)  => fvs(e1) union fvs(e2)
+    case ToFloat(e, _)   => fvs(e)
+    case ToInt(e, _)     => fvs(e)
     case Lam(x, t, e, _) => fvs(e) - x
     case _               => Set.empty
   }
@@ -61,6 +85,10 @@ def substValue[A](x: Name, e: Stlc[A], v: Stlc[A] & Value): Stlc[A] = e match {
   // Variables
   case Stlc.Var(y, _) if x == y => v
   case e: Stlc.Var[A]           => e
+
+  // Builtins
+  case Stlc.ToFloat(e, loc) => Stlc.ToFloat(substValue(x, e, v), loc)
+  case Stlc.ToInt(e, loc)   => Stlc.ToInt(substValue(x, e, v), loc)
 
   // Things we might need to substitute in
   case Stlc.Plus(e1, e2, loc) =>
@@ -95,6 +123,10 @@ def substTerm[A](x: Name, e: Stlc[A], term: Stlc[A]): Stlc[A] = e match {
   // Variables
   case Stlc.Var(y, _) if x == y => term
   case e: Stlc.Var[A]           => e
+
+  // Builtins
+  case Stlc.ToFloat(e, loc) => Stlc.ToFloat(substTerm(x, e, term), loc)
+  case Stlc.ToInt(e, loc)   => Stlc.ToInt(substTerm(x, e, term), loc)
 
   // Things we might need to substitute in
   case Stlc.Plus(e1, e2, loc) =>

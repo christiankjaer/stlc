@@ -34,7 +34,7 @@ val parseTerm: P[LStlc] = P.recursive[LStlc] { pt =>
   val unit = locToken(P.string("()")).map(i => Stlc.SUnit(i._2))
 
   val name: P[(Name, SourceLocation)] =
-    locToken((alpha ~ (alpha | digit).rep0).string)
+    locToken((alpha ~ (alpha | digit | P.charIn('_', '-')).rep0).string)
 
   val frac = (P.char('.') ~ Numbers.digits).string
 

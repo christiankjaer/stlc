@@ -1,5 +1,7 @@
 // Sort of a trivial bidirectional typing thing.
 
+import cats.syntax.all.*
+
 final case class TypeError(message: String, loc: SourceLocation)
 
 // Will check if the type of a term is in `ts`
@@ -20,6 +22,12 @@ def infer(term: LStlc, ctx: Map[Name, Ty]): Either[TypeError, Ty] = term match {
   case Stlc.SInt(_, _)   => Right(Ty.Int)
   case Stlc.SUnit(_)     => Right(Ty.Unit)
   case Stlc.SFloat(_, _) => Right(Ty.Float)
+
+  case Stlc.ToFloat(e, loc) =>
+    check(e, ctx, Set(Ty.Int)).as(Ty.Float)
+  case Stlc.ToInt(e, loc) =>
+    check(e, ctx, Set(Ty.Float)).as(Ty.Int)
+
   case Stlc.Var(x, loc) =>
     ctx.get(x).toRight(TypeError(s"Variable $x not defined", loc))
   case Stlc.Plus(e1, e2, _) =>
@@ -29,7 +37,7 @@ def infer(term: LStlc, ctx: Map[Name, Ty]): Either[TypeError, Ty] = term match {
     } yield t
   case Stlc.App(e1, e2, loc) =>
     infer(e1, ctx).flatMap {
-      case Ty.Arrow(t1, t2) => check(e2, ctx, Set(t1)).map(_ => t2)
+      case Ty.Arrow(t1, t2) => check(e2, ctx, Set(t1)).as(t2)
       case t => Left(TypeError(s"Expected function, got term of type $t", loc))
     }
   case Stlc.Lam(x, tx, body, _) =>
