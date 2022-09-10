@@ -1,6 +1,6 @@
 class StlcSuite extends munit.FunSuite {
   import Stlc.*
-  val loc = SourceLocation(0,0)
+  val loc = SourceLocation(0, 0)
   test("infer") {
     assertEquals(
       infer(Lam("x", Ty.Int, Var("x", loc), loc), Map.empty),
@@ -63,26 +63,38 @@ class StlcSuite extends munit.FunSuite {
   }
 
   test("step") {
-    assertEquals(step(Plus(SInt(10, ()), SInt(20, ()), ())), Some(SInt(30, ())))
-    assertEquals(step(Plus(SInt(10, ()), SFloat(20, ()), ())), None)
-    assertEquals(step(Plus(SInt(10, ()), SUnit(()), ())), None)
+    assertEquals(
+      stepCBV(Plus(SInt(10, ()), SInt(20, ()), ())),
+      Some(SInt(30, ()))
+    )
+    assertEquals(stepCBV(Plus(SInt(10, ()), SFloat(20, ()), ())), None)
+    assertEquals(stepCBV(Plus(SInt(10, ()), SUnit(()), ())), None)
 
     val lam = Lam("x", Ty.Int, Var("x", ()), ())
-    assertEquals(step(lam), None)
+    assertEquals(stepCBV(lam), None)
 
     // Apply a non-value
     assertEquals(
-      step(App(lam, Plus(SInt(10, ()), SInt(20, ()), ()), ())),
+      stepCBV(App(lam, Plus(SInt(10, ()), SInt(20, ()), ()), ())),
       Some(App(lam, SInt(30, ()), ()))
     )
   }
 
   test("evaluate") {
 
-    assert(evaluate(Plus(SInt(10, loc), SFloat(10, loc), loc), 11).isLeft)
-    assertEquals(evaluate(Plus(SInt(10, loc), SInt(10, loc), loc), 11), Right(SInt(20, loc), 10))
+    assert(
+      evaluate(Plus(SInt(10, loc), SFloat(10, loc), loc), 11, stepCBV).isLeft
+    )
     assertEquals(
-      evaluate(App(Lam("x", Ty.Int, Var("x", loc), loc), SInt(10, loc), loc), 10),
+      evaluate(Plus(SInt(10, loc), SInt(10, loc), loc), 11, stepCBV),
+      Right(SInt(20, loc), 10)
+    )
+    assertEquals(
+      evaluate(
+        App(Lam("x", Ty.Int, Var("x", loc), loc), SInt(10, loc), loc),
+        10,
+        stepCBV
+      ),
       Right(SInt(10, loc), 9)
     )
   }

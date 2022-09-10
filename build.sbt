@@ -1,7 +1,6 @@
 val scala3Version = "3.2.0"
 
-scalacOptions ++= Seq("-deprecation"
-)
+scalacOptions ++= Seq("-deprecation")
 
 lazy val root = project
   .in(file("."))
