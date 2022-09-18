@@ -106,7 +106,7 @@ object Main
 
   // Crude toplevel. Transformers in scala suck.
   def interact: StateT[IO, TL, Boolean] =
-    StateT.liftF(IO.print("> ")) >>
+    StateT.liftF(IO.print("\n> ")) >>
       StateT.liftF(IO.readLine).flatMap {
         case ":q" => StateT.pure(true)
 

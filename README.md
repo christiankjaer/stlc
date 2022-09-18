@@ -2,6 +2,8 @@
 
 ## Usage
 
+Requires [sbt](https://www.scala-sbt.org/)
+
 ```
 Usage: stlc --gas <integer> [--evaluation <string>] [--no_trace]
 

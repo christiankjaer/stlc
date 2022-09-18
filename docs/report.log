@@ -1,14 +1,17 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2022/dev/Debian) (preloaded format=xelatex 2022.5.27)  10 SEP 2022 13:53
+This is XeTeX, Version 3.141592653-2.6-0.999993 (Web2C 2021/nixos.org) (preloaded format=xelatex 1980.1.1)  11 SEP 2022 16:36
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**report.tex
-(./report.tex
+**/home/ckjaer/git/stlc/docs/report.tex
+(/home/ckjaer/git/stlc/docs/report.tex
 LaTeX2e <2021-11-15> patch level 1
-L3 programming layer <2022-01-21>
-(/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
+L3 programming layer <2022-02-24>
+(/nix/store/dryz6jxrnq7fkbwnvvabfidkhy4mg16f-texlive-combined-full-2021-final/s
+hare/texmf/tex/latex/base/article.cls
 Document Class: article 2021/10/04 v1.4n Standard LaTeX document class
-(/usr/share/texlive/texmf-dist/tex/latex/base/size11.clo
+
+(/nix/store/dryz6jxrnq7fkbwnvvabfidkhy4mg16f-texlive-combined-full-2021-final/s
+hare/texmf/tex/latex/base/size11.clo
 File: size11.clo 2021/10/04 v1.4n Standard LaTeX file (size option)
 )
 \c@part=\count181
@@ -23,18 +26,22 @@ File: size11.clo 2021/10/04 v1.4n Standard LaTeX file (size option)
 \belowcaptionskip=\skip48
 \bibindent=\dimen138
 )
-(/usr/share/texlive/texmf-dist/tex/latex/geometry/geometry.sty
+(/nix/store/dryz6jxrnq7fkbwnvvabfidkhy4mg16f-texlive-combined-full-2021-final/s
+hare/texmf/tex/latex/geometry/geometry.sty
 Package: geometry 2020/01/02 v5.9 Page Geometry
 
-(/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
+(/nix/store/dryz6jxrnq7fkbwnvvabfidkhy4mg16f-texlive-combined-full-2021-final/s
+hare/texmf/tex/latex/graphics/keyval.sty
 Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
 \KV@toks@=\toks16
 )
-(/usr/share/texlive/texmf-dist/tex/generic/iftex/ifvtex.sty
+(/nix/store/dryz6jxrnq7fkbwnvvabfidkhy4mg16f-texlive-combined-full-2021-final/s
+hare/texmf/tex/generic/iftex/ifvtex.sty
 Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
 
-(/usr/share/texlive/texmf-dist/tex/generic/iftex/iftex.sty
-Package: iftex 2020/03/06 v1.0d TeX engine tests
+(/nix/store/dryz6jxrnq7fkbwnvvabfidkhy4mg16f-texlive-combined-full-2021-final/s
+hare/texmf/tex/generic/iftex/iftex.sty
+Package: iftex 2022/02/03 v1.0f TeX engine tests
 ))
 \Gm@cnth=\count189
 \Gm@cntv=\count190
@@ -49,15 +56,18 @@ Package: iftex 2020/03/06 v1.0d TeX engine tests
 \Gm@layoutvoffset=\dimen146
 \Gm@dimlist=\toks17
 )
-(/usr/share/texlive/texmf-dist/tex/latex/fontspec/fontspec.sty
-(/usr/share/texlive/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
-(/usr/share/texlive/texmf-dist/tex/latex/l3kernel/expl3.sty
-Package: expl3 2022-01-21 L3 programming layer (loader) 
+(/nix/store/dryz6jxrnq7fkbwnvvabfidkhy4mg16f-texlive-combined-full-2021-final/s
+hare/texmf/tex/latex/fontspec/fontspec.sty
+(/nix/store/dryz6jxrnq7fkbwnvvabfidkhy4mg16f-texlive-combined-full-2021-final/s
+hare/texmf/tex/latex/l3packages/xparse/xparse.sty
+(/nix/store/dryz6jxrnq7fkbwnvvabfidkhy4mg16f-texlive-combined-full-2021-final/s
+hare/texmf/tex/latex/l3kernel/expl3.sty
+Package: expl3 2022-02-24 L3 programming layer (loader) 
 
-(/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-xetex.def
-File: l3backend-xetex.def 2022-01-12 L3 backend support: XeTeX
-
-(|extractbb --version)
+(/nix/store/dryz6jxrnq7fkbwnvvabfidkhy4mg16f-texlive-combined-full-2021-final/s
+hare/texmf/tex/latex/l3backend/l3backend-xetex.def
+File: l3backend-xetex.def 2022-02-07 L3 backend support: XeTeX
+ (|extractbb --version)
 \c__kernel_sys_dvipdfmx_version_int=\count192
 \l__color_backend_stack_int=\count193
 \g__color_backend_stack_int=\count194
@@ -71,7 +81,8 @@ Package: xparse 2022-01-12 L3 Experimental document command parser
 )
 Package: fontspec 2022/01/15 v2.8a Font selection for XeLaTeX and LuaLaTeX
 
-(/usr/share/texlive/texmf-dist/tex/latex/fontspec/fontspec-xetex.sty
+(/nix/store/dryz6jxrnq7fkbwnvvabfidkhy4mg16f-texlive-combined-full-2021-final/s
+hare/texmf/tex/latex/fontspec/fontspec-xetex.sty
 Package: fontspec-xetex 2022/01/15 v2.8a Font selection for XeLaTeX and LuaLaTe
 X
 \l__fontspec_script_int=\count199
@@ -89,11 +100,14 @@ X
 \l__fontspec_tmpb_dim=\dimen148
 \l__fontspec_tmpc_dim=\dimen149
 
-(/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
+(/nix/store/dryz6jxrnq7fkbwnvvabfidkhy4mg16f-texlive-combined-full-2021-final/s
+hare/texmf/tex/latex/base/fontenc.sty
 Package: fontenc 2021/04/29 v2.0v Standard LaTeX package
 )
-(/usr/share/texlive/texmf-dist/tex/latex/fontspec/fontspec.cfg)))
-(/usr/share/texlive/texmf-dist/tex/latex/listings/listings.sty
+(/nix/store/dryz6jxrnq7fkbwnvvabfidkhy4mg16f-texlive-combined-full-2021-final/s
+hare/texmf/tex/latex/fontspec/fontspec.cfg)))
+(/nix/store/dryz6jxrnq7fkbwnvvabfidkhy4mg16f-texlive-combined-full-2021-final/s
+hare/texmf/tex/latex/listings/listings.sty
 \lst@mode=\count276
 \lst@gtempboxa=\box51
 \lst@token=\toks18
@@ -107,26 +121,31 @@ Package: fontenc 2021/04/29 v2.0v Standard LaTeX package
 \lst@lineno=\count281
 \lst@maxwidth=\dimen153
 
-(/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty
+(/nix/store/dryz6jxrnq7fkbwnvvabfidkhy4mg16f-texlive-combined-full-2021-final/s
+hare/texmf/tex/latex/listings/lstmisc.sty
 File: lstmisc.sty 2020/03/24 1.8d (Carsten Heinz)
 \c@lstnumber=\count282
 \lst@skipnumbers=\count283
 \lst@framebox=\box52
 )
-(/usr/share/texlive/texmf-dist/tex/latex/listings/listings.cfg
+(/nix/store/dryz6jxrnq7fkbwnvvabfidkhy4mg16f-texlive-combined-full-2021-final/s
+hare/texmf/tex/latex/listings/listings.cfg
 File: listings.cfg 2020/03/24 1.8d listings configuration
 ))
 Package: listings 2020/03/24 1.8d (Carsten Heinz)
 
-(/usr/share/texlive/texmf-dist/tex/latex/xcolor/xcolor.sty
+(/nix/store/dryz6jxrnq7fkbwnvvabfidkhy4mg16f-texlive-combined-full-2021-final/s
+hare/texmf/tex/latex/xcolor/xcolor.sty
 Package: xcolor 2021/10/31 v2.13 LaTeX color extensions (UK)
 
-(/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/color.cfg
+(/nix/store/dryz6jxrnq7fkbwnvvabfidkhy4mg16f-texlive-combined-full-2021-final/s
+hare/texmf/tex/latex/graphics-cfg/color.cfg
 File: color.cfg 2016/01/02 v1.6 sample color configuration
 )
 Package xcolor Info: Driver file: xetex.def on input line 227.
 
-(/usr/share/texlive/texmf-dist/tex/latex/graphics-def/xetex.def
+(/nix/store/dryz6jxrnq7fkbwnvvabfidkhy4mg16f-texlive-combined-full-2021-final/s
+hare/texmf/tex/latex/graphics-def/xetex.def
 File: xetex.def 2021/03/18 v5.0k Graphics/color driver for xetex
 )
 Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1352.
@@ -138,13 +157,16 @@ Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1373.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1374.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1375.
 )
-(/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
+(/nix/store/dryz6jxrnq7fkbwnvvabfidkhy4mg16f-texlive-combined-full-2021-final/s
+hare/texmf/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2020/03/24 1.8d listings language file
 )
-(/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang2.sty
+(/nix/store/dryz6jxrnq7fkbwnvvabfidkhy4mg16f-texlive-combined-full-2021-final/s
+hare/texmf/tex/latex/listings/lstlang2.sty
 File: lstlang2.sty 2020/03/24 1.8d listings language file
 )
-(/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang3.sty
+(/nix/store/dryz6jxrnq7fkbwnvvabfidkhy4mg16f-texlive-combined-full-2021-final/s
+hare/texmf/tex/latex/listings/lstlang3.sty
 File: lstlang3.sty 2020/03/24 1.8d listings language file
 ) (./report.aux)
 \openout1 = `report.aux'.
@@ -161,7 +183,8 @@ LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 35.
 LaTeX Font Info:    Trying to load font information for TS1+cmr on input line 3
 5.
 
-(/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd
+(/nix/store/dryz6jxrnq7fkbwnvvabfidkhy4mg16f-texlive-combined-full-2021-final/s
+hare/texmf/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 )
 LaTeX Font Info:    ... okay on input line 35.
@@ -280,12 +303,12 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 
 ] [2] (./report.aux) ) 
 Here is how much of TeX's memory you used:
- 5507 strings out of 476191
- 134135 string characters out of 5812072
- 734127 words of memory out of 5000000
- 26221 multiletter control sequences out of 15000+600000
+ 5515 strings out of 476180
+ 137595 string characters out of 5785740
+ 740533 words of memory out of 5000000
+ 26239 multiletter control sequences out of 15000+600000
  473976 words of font info for 62 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 73i,6n,77p,262b,1035s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 73i,6n,77p,293b,1035s stack positions out of 5000i,500n,10000p,200000b,80000s
 
 Output written on report.pdf (2 pages).

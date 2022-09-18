@@ -43,8 +43,8 @@ enum Stlc[A] {
     case Var(x, _)          => x
     case App(e1, e2, _)     => s"($e1 $e2)"
     case Plus(e1, e2, _)    => s"($e1 + $e2)"
-    case ToInt(e, _)        => s"to_int($e)"
-    case ToFloat(e, _)      => s"to_float($e)"
+    case ToInt(e, _)        => s"int[$e]"
+    case ToFloat(e, _)      => s"float[$e]"
   }
 
   // Every piece of surface syntax should have an A

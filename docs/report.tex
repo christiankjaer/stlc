@@ -35,6 +35,8 @@
 \begin{document}
 \maketitle
 \section{Changes for adding $\mathbf{float}$}
+We add $\mathbf{float}$ to the language by adding a new base type. We choose to overload $+$ and then only allow it to add numbers of the same type. To add integers to floating point numbers we require explicit casts.
+
 We start by extending the base syntax with decimal literals $m$ ($1.0$, $42.42$, $-3.14$, ...) with a decimal dot. Types and value are extended to be
 \[
     \tau ::= ... \ |\ \mathbf{float}\ \quad
@@ -46,13 +48,16 @@ We add new syntactic constructs to the language for casts and floating point lit
 \]
 and we add new typing rules
 \[
-    \textsc{T-Float}\frac{}{\Gamma \vdash m : \mathbf{float}} \quad
+    \textsc{T-AddF}\frac{\Gamma \vdash e_1 : \mathbf{float}\quad \Gamma \vdash e_2 : \mathbf{float}}{\Gamma \vdash e_1 + e_2 : \mathbf{float}} \quad
+    \textsc{T-Float}\frac{}{\Gamma \vdash m : \mathbf{float}}
+\]
+\[
     \textsc{T-ToFloat}\frac{\Gamma \vdash e : \mathbf{int}}{\Gamma \vdash \mathbf{float}(e) : \mathbf{float}} \quad
     \textsc{T-ToInt}\frac{\Gamma \vdash e : \mathbf{float}}{\Gamma \vdash \mathbf{int}(e) : \mathbf{int}}
 \]
 and new reduction rules
 \[
-    \textsc{Add-F}\frac{}{m_1 + m_2 \rightarrow m}m = m_1 + m_2 \quad
+    \textsc{AddF}\frac{}{m_1 + m_2 \rightarrow m}m = m_1 + m_2 \quad
     \textsc{Int}\frac{}{\mathbf{int}(m) \rightarrow n}n = \lfloor m \rfloor \quad
     \textsc{Float}\frac{}{\mathbf{float}(n) \rightarrow m}m = n
 \]
@@ -60,6 +65,7 @@ And context rules
 \[
     E ::= ...\ |\ \mathbf{int}(E) \ |\ \mathbf{float}(E)
 \]
+Now one writes $\mathbf{int}(\mathbf{float}(10) + 10.5)$ for adding two numbers of different types together and converting the result to an integer. We use the context rule to reduce under the $\mathbf{int}$.
 \section{Implementation}
 Included is a Scala 3 implementation of the lambda calculus with the above changes.
 
@@ -84,14 +90,14 @@ type LStlc = Stlc[SourceLocation]
 def check(term: LStlc, ctx: Map[Name, Ty], ts: Set[Ty]): Either[TypeError, Ty]
 def infer(term: LStlc, ctx: Map[Name, Ty]): Either[TypeError, Ty]
 \end{lstlisting}
-This is a trivial example of bidirectional type checking.
+This is a trivial example of bidirectional type checking since we have annotated the lambda terms with the type of their arguments and therefore inference is always possible. The checking function in still nice for convenience though.
 \subsection{Reduction}
 We implement small step reduction with two functions. One for substituting a value for a variable, and one for taking a small step reduction. The stepping function will return nothing if we are stuck or if we have reached a value.
 \begin{lstlisting}
 def substValue[A](x: Name, e: Stlc[A], v: Stlc[A] & Value): Stlc[A]
 def stepCBV[A](term: Stlc[A]): Option[Stlc[A]]
 \end{lstlisting}
-
+We have also included call-by-name semantics, but we will not discuss it here.
 \section{Running the interpreter}
 To make the casts a bit more ergonomic and to avoid changing the parser we add them to the "standard library". This is done by type checking in a context
 \begin{lstlisting}
@@ -105,9 +111,7 @@ and we have small step rules to reduce these functions to the $\eta$-expansion o
 def stepCBV[A](term: Stlc[A]): Option[Stlc[A]] = {
   ...
   case Var("float", a) => Some(Lam("x", Ty.Int, ToFloat(Var("x", a), a), a))
-  case Var("int", loc) => Some(Lam("x", Ty.Float, ToInt(Var("x", a), a), a))
+  case Var("int", a) => Some(Lam("x", Ty.Float, ToInt(Var("x", a), a), a))
 \end{lstlisting}
-This makes sure that we can treat the casts as regular functions.
-
-How to run the project can be found in the README.md file included with the source code.
+This makes sure that we can treat the casts as regular functions. How to run the project can be found in the README.md file included with the source code.
 \end{document}
