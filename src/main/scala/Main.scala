@@ -102,7 +102,15 @@ object Main
       )
       .merge
 
+  def showType(term: String): String =
+    parse(term)
+      .leftMap(showParseErrors)
+      .flatMap(infer(_, builtins).leftMap(showTypeError))
+      .map(_.toString)
+      .merge
+
   val gasRegex = ":set gas (\\d+)".r
+  val typeRegex = ":t (.*)".r
 
   // Crude toplevel. Transformers in scala suck.
   def interact: StateT[IO, TL, Boolean] =
@@ -133,6 +141,9 @@ object Main
             StateT
               .liftF(IO.println(s"setting evaluation strategy to cbv"))
               .as(false)
+
+        case typeRegex(term) =>
+          StateT.liftF(IO.println(showType(term))).as(false)
 
         case term =>
           StateT

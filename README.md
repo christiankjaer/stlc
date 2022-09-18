@@ -36,6 +36,8 @@ The rest is not surprising.
 
 `:set eval <cbv|cbn>`
 
+`:t <term>`
+
 
 ### Example
 
