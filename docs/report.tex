@@ -35,7 +35,7 @@
 \begin{document}
 \maketitle
 \section{Changes for adding $\mathbf{float}$}
-We add $\mathbf{float}$ to the language by adding a new base type. We choose to overload $+$ and then only allow it to add numbers of the same type. To add integers to floating point numbers we require explicit casts.
+We add $\mathbf{float}$ to the language by adding a new base type. We choose to overload $+$ and then only allow adding numbers of the same type. To add integers to floating point numbers we require explicit casts.
 
 We start by extending the base syntax with decimal literals $m$ ($1.0$, $42.42$, $-3.14$, ...) with a decimal dot. Types and value are extended to be
 \[
@@ -79,7 +79,7 @@ enum Stlc[A] {
   ...
 }
 \end{lstlisting}
-In the program we can then use intersection types to require that a term is a value like
+In the program we can then use intersection types to require that a term is a value:
 \begin{lstlisting}
 def foo[A](v: Stlc[A] & Value): ...
 \end{lstlisting}
@@ -87,6 +87,7 @@ def foo[A](v: Stlc[A] & Value): ...
 We include two functions. One for checking that a term has one of the required types and one for inferring the type of a term.
 \begin{lstlisting}
 type LStlc = Stlc[SourceLocation]
+final case class TypeError(message: String, loc: SourceLocation)
 def check(term: LStlc, ctx: Map[Name, Ty], ts: Set[Ty]): Either[TypeError, Ty]
 def infer(term: LStlc, ctx: Map[Name, Ty]): Either[TypeError, Ty]
 \end{lstlisting}
@@ -97,7 +98,7 @@ We implement small step reduction with two functions. One for substituting a val
 def substValue[A](x: Name, e: Stlc[A], v: Stlc[A] & Value): Stlc[A]
 def stepCBV[A](term: Stlc[A]): Option[Stlc[A]]
 \end{lstlisting}
-We have also included call-by-name semantics, but we will not discuss it here.
+We have also included call-by-name semantics, but we will not discuss it here. The interpreter then works by reducing with the stepping function until we run out of gas or nothing is returned. This means that we are either stuck or have reached a value. If the typing rules are implemented correctly we should never be stuck.
 \section{Running the interpreter}
 To make the casts a bit more ergonomic and to avoid changing the parser we add them to the "standard library". This is done by type checking in a context
 \begin{lstlisting}
